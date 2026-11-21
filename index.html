@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#000000">
+  <title>Teleprompter + Gravação</title>
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+  <!-- Tela 1: edição do roteiro -->
+  <div id="editor">
+    <h1>📜 Teleprompter + câmera</h1>
+    <textarea id="roteiro" placeholder="Cole ou digite o seu texto aqui…"></textarea>
+    <p class="dica">Dica: use o microfone do teclado do iPhone para ditar. Linha em branco = pausa maior entre parágrafos. Ao abrir, o Safari vai pedir permissão de câmera e microfone: toque em Permitir.</p>
+    <div class="linha">
+      <button class="pilula" id="btnLimpar">Limpar</button>
+      <button class="pilula principal" id="btnAbrirCamera">🎥 Abrir câmera</button>
+    </div>
+  </div>
+
+  <!-- Tela 2: câmera com o texto rolando por cima -->
+  <div id="palco">
+    <video id="camera" playsinline muted autoplay></video>
+
+    <div id="janelaTexto">
+      <div id="faixaLeitura"></div>
+      <div id="texto"></div>
+      <div id="barraProgresso"></div>
+    </div>
+
+    <div id="tempo">0:00 / 0:00</div>
+    <div id="indicadorGravacao"><i></i><span id="tempoGravacao">0:00</span></div>
+    <div id="aviso">Não saia do Safari nem bloqueie a tela durante a gravação.</div>
+    <div id="contagem"></div>
+
+    <div id="ajustes">
+      <label><span>Velocidade</span><input id="velocidade" type="range" min="80" max="220" step="5" value="140"><b id="velocidadeValor">140</b></label>
+      <label><span>Fonte</span><input id="fonte" type="range" min="22" max="64" step="1" value="34"><b id="fonteValor">34</b></label>
+      <label><span>Fundo</span><input id="fundo" type="range" min="0" max="90" step="5" value="55"><b id="fundoValor">55%</b></label>
+      <div class="atalhos">
+        <button class="pilula" id="btnInicio">⏮ Início</button>
+        <button class="pilula" id="btnVoltar">⏪ 5s</button>
+        <button class="pilula" id="btnAvancar">5s ⏩</button>
+      </div>
+    </div>
+
+    <div id="controles">
+      <button id="btnEditar" title="Editar texto">✏️</button>
+      <button id="btnEnsaiar" title="Ensaiar sem gravar">▶</button>
+      <button id="btnGravar" title="Gravar"></button>
+      <button id="btnTrocarCamera" title="Trocar câmera">🔄</button>
+      <button id="btnAjustes" title="Ajustes">⚙️</button>
+    </div>
+  </div>
+
+  <!-- Tela 3: vídeo gravado -->
+  <div id="resultado">
+    <video id="videoFinal" controls playsinline></video>
+    <div class="linha">
+      <button class="pilula principal" id="btnCompartilhar">💾 Salvar / Compartilhar</button>
+      <button class="pilula" id="btnBaixar">⬇️ Baixar</button>
+      <button class="pilula" id="btnGravarDeNovo">🔁 Gravar de novo</button>
+    </div>
+    <p>Para guardar na galeria: toque em “Salvar / Compartilhar” e escolha “Salvar vídeo”. A gravação sai sem espelhamento, como os outros veem você.</p>
+  </div>
+
+  <!-- Tela de erro -->
+  <div id="erro">
+    <h2>Não consegui abrir a câmera</h2>
+    <p id="erroMensagem"></p>
+    <button class="pilula principal" id="btnFecharErro">Voltar</button>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

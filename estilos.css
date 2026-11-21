@@ -1,0 +1,229 @@
+:root {
+  --tamanho-fonte: 34px;
+  --largura-texto: 92%;
+  --opacidade-fundo: .55;
+  --destaque: #ffd54a;
+  --linha-leitura: .32;
+  --margem-topo: env(safe-area-inset-top, 0px);
+  --margem-base: env(safe-area-inset-bottom, 0px);
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #000;
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  overflow: hidden;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+  overscroll-behavior: none;
+}
+
+/* Botões */
+button {
+  font: inherit;
+  color: #fff;
+  background: rgba(40, 40, 40, .85);
+  border: 0;
+  border-radius: 50%;
+  width: 54px;
+  height: 54px;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+button:active { filter: brightness(1.5); }
+button:disabled { opacity: .35; }
+button.pilula { border-radius: 14px; width: auto; padding: 0 18px; height: 50px; font-size: 17px; }
+button.principal { background: var(--destaque); color: #000; font-weight: 700; }
+
+/* Tela de edição */
+#editor {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: calc(var(--margem-topo) + 14px) 16px calc(var(--margem-base) + 14px);
+  background: #111;
+}
+#editor h1 { margin: 0; font-size: 22px; font-weight: 600; }
+#roteiro {
+  flex: 1;
+  width: 100%;
+  resize: none;
+  background: #1b1b1b;
+  color: #fff;
+  border: 1px solid #333;
+  border-radius: 14px;
+  padding: 14px;
+  font: inherit;
+  font-size: 17px;
+  line-height: 1.5;
+  -webkit-user-select: text;
+  user-select: text;
+}
+#editor .linha { display: flex; gap: 10px; justify-content: flex-end; }
+#editor .dica { margin: 0; color: #8d8d8d; font-size: 13px; line-height: 1.4; }
+
+/* Tela da câmera */
+#palco { position: fixed; inset: 0; display: none; background: #000; }
+#camera { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: #000; }
+#camera.espelhada { transform: scaleX(-1); }
+
+#janelaTexto {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(var(--margem-topo) + 6px);
+  height: 50%;
+  overflow: hidden;
+  background: rgba(0, 0, 0, var(--opacidade-fundo));
+  border-radius: 0 0 22px 22px;
+}
+#texto {
+  position: relative;
+  width: var(--largura-texto);
+  margin: 0 auto;
+  font-size: var(--tamanho-fonte);
+  line-height: 1.45;
+  font-weight: 650;
+  will-change: transform;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, .6);
+}
+#texto .paragrafo { margin: 0 0 .7em; }
+#texto span { transition: opacity .25s, color .25s; }
+#texto span.lida { opacity: .3; }
+#texto span.atual { color: var(--destaque); }
+
+#faixaLeitura {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(var(--linha-leitura) * 100% - var(--tamanho-fonte) * .2);
+  height: calc(var(--tamanho-fonte) * 1.45);
+  background: rgba(255, 213, 74, .08);
+  border-top: 1px solid rgba(255, 213, 74, .25);
+  border-bottom: 1px solid rgba(255, 213, 74, .25);
+  pointer-events: none;
+  z-index: 2;
+}
+#barraProgresso { position: absolute; left: 0; bottom: 0; height: 4px; width: 0; background: var(--destaque); z-index: 3; }
+
+#indicadorGravacao {
+  position: absolute;
+  right: 12px;
+  top: calc(var(--margem-topo) + 14px);
+  z-index: 4;
+  display: none;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, .6);
+  padding: 5px 10px;
+  border-radius: 99px;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+#indicadorGravacao i { width: 10px; height: 10px; border-radius: 50%; background: #ff3b30; animation: piscar 1s infinite; }
+@keyframes piscar { 50% { opacity: .25; } }
+
+#tempo {
+  position: absolute;
+  left: 12px;
+  top: calc(var(--margem-topo) + 14px);
+  z-index: 4;
+  font-size: 13px;
+  color: #ccc;
+  background: rgba(0, 0, 0, .45);
+  padding: 4px 9px;
+  border-radius: 99px;
+  font-variant-numeric: tabular-nums;
+}
+
+#controles {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 14px 12px calc(var(--margem-base) + 16px);
+  background: linear-gradient(transparent, rgba(0, 0, 0, .75));
+  z-index: 6;
+}
+#btnGravar { width: 78px; height: 78px; background: transparent; border: 4px solid #fff; padding: 0; }
+#btnGravar::after { content: ""; width: 56px; height: 56px; border-radius: 50%; background: #ff3b30; transition: all .2s; }
+#btnGravar.gravando::after { width: 30px; height: 30px; border-radius: 8px; }
+
+#ajustes {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: calc(var(--margem-base) + 118px);
+  z-index: 7;
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  background: rgba(20, 20, 20, .92);
+  border-radius: 18px;
+  padding: 12px 16px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+#ajustes label { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #ccc; }
+#ajustes label span { width: 84px; }
+#ajustes b { width: 3.2em; text-align: right; color: #fff; font-variant-numeric: tabular-nums; }
+#ajustes input { flex: 1; accent-color: var(--destaque); height: 34px; }
+#ajustes .atalhos { display: flex; gap: 10px; align-items: center; }
+
+#contagem {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 200px;
+  font-weight: 800;
+  color: var(--destaque);
+  background: rgba(0, 0, 0, .55);
+  z-index: 9;
+}
+#aviso {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: calc(var(--margem-base) + 112px);
+  z-index: 5;
+  display: none;
+  text-align: center;
+  font-size: 12px;
+  color: #ddd;
+  text-shadow: 0 1px 3px #000;
+  pointer-events: none;
+}
+
+/* Telas de resultado e de erro */
+#resultado, #erro {
+  position: fixed;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  gap: 14px;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--margem-topo) + 16px) 16px calc(var(--margem-base) + 16px);
+  background: #000;
+  z-index: 20;
+}
+#resultado video { max-width: 100%; max-height: 68%; border-radius: 14px; background: #111; }
+#resultado .linha { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+#resultado p, #erro p { margin: 0; color: #aaa; font-size: 13px; text-align: center; line-height: 1.4; max-width: 420px; }
+#erro h2 { margin: 0; font-size: 20px; }
